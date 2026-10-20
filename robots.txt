@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /
+
+# Versão provisória para avaliação. Não deve ser indexada.
