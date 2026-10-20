@@ -1,27 +1,23 @@
 /*
  * support.js — Instituto Carla Gonçalves
  * Melhorias progressivas do site estático:
- *  - variáveis --vh / --vw reais (evita "pulo" da viewport no celular)
  *  - animações de revelação ao rolar (os elementos já aparecem sem JS;
  *    aqui apenas adicionamos a transição suave quando entram na tela)
  * O site é totalmente funcional e legível mesmo sem este arquivo.
+ *
+ * IMPORTANTE: --vh / --vw NÃO são definidos por este script.
+ * Eles já são controlados pelo próprio CSS original:
+ *   @media (min-width:1024px){ html{ zoom:.8; --vh:1.25vh; --vw:1.25vw } }
+ * Em telas menores, var(--vh,1vh)/var(--vw,1vw) caem no fallback nativo
+ * 1vh/1vw. Uma versão anterior deste arquivo sobrescrevia --vh/--vw com
+ * valores em pixels via JavaScript, o que quebrava o compensador de zoom
+ * do desktop (a foto do hero "estourava" para cima da tela e o logo
+ * ficava com o tamanho errado). Por isso essa parte foi removida.
  */
 (function () {
   "use strict";
 
-  // 1) --vh / --vw reais (as páginas usam var(--vh,1vh) / var(--vw,1vw) com fallback)
-  function setUnits() {
-    var vh = window.innerHeight * 0.01;
-    var vw = window.innerWidth * 0.01;
-    var r = document.documentElement;
-    r.style.setProperty("--vh", vh + "px");
-    r.style.setProperty("--vw", vw + "px");
-  }
-  setUnits();
-  window.addEventListener("resize", setUnits, { passive: true });
-  window.addEventListener("orientationchange", setUnits, { passive: true });
-
-  // 2) Revelação progressiva ao rolar
+  // Revelação progressiva ao rolar
   function initReveal() {
     var html = document.documentElement;
     // respeita quem prefere menos movimento
